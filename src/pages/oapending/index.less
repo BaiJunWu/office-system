@@ -1,0 +1,77 @@
+.pending {
+  .cardleft {
+    min-height: calc(100vh - 235px);
+    padding: 10px 5px 0 5px;
+  }
+  .iconlist {
+    display: flex;
+    justify-content: space-between;
+    width: 175px;
+  }
+  .drawer {
+    width: 100%;
+    position: relative;
+    top: 40px;
+    height: 200px;
+    overflow: hidden;
+  }
+  .submit {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #e9e9e9;
+    padding: 10px 16px;
+    background: #fff;
+    text-align: center;
+  }
+  #app {
+    width: 600px;
+    height: 400px;
+  }
+  :global {
+    .ant-card-body {
+      padding: 0;
+    }
+    .ant-layout-sider {
+      background-color: #fff;
+    }
+    .ant-col-offset-1 {
+      margin-left: 10px;
+    }
+    .ant-layout-sider-zero-width-trigger {
+      background-color: #fff;
+      color: #666;
+      bottom: 0px;
+      right: -36px;
+      transform: translate(0, -50%);
+      z-index: 999;
+    }
+    .ant-layout-sider-zero-width-trigger:hover {
+      color: #1890ff;
+      background-color: #f9f9fc;
+      transition: all 0.3s ease-out;
+    }
+    .ant-tabs-bar {
+      border: 0;
+    }
+    .ant-form-item {
+      width: 100%;
+      display: flex;
+    }
+
+    .ant-form-item-control-wrapper {
+      flex: 1;
+    }
+    .ant-drawer-body {
+      padding: 50px 20px 0 20px;
+    }
+    .ant-layout-header {
+      background-color: #f9f9f9;
+    }
+
+    .ant-drawer-content-wrapper {
+      height: 300px !important;
+    }
+  }
+}
