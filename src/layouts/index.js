@@ -37,7 +37,7 @@ class ComLayout extends Component {
   render () {
     const { isMobile } = this.state;
     const { app, dispatch, children } = this.props;
-    const { collapsed, MenuList } = app;
+    const { collapsed } = app;
     const model = {
       app,
       dispatch,

@@ -1,11 +1,27 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { NavLink } from 'umi';
 import { Menu, Icon } from 'antd'
+import { prefix } from 'utils/config'
 import { arrayToTree, compare } from 'utils/common'
 const { SubMenu } = Menu
 
 const ComMenu = (props) => {
-  const menuTree = arrayToTree(props.MenuList, 'menuId', 'parentMenuId').sort(compare('menuOrder'))
+  const [openKeys, setOpenKeys] = useState([]);
+
+  const menuList = JSON.parse(sessionStorage.getItem(`${prefix}menulist`))
+
+  const menuTree = arrayToTree(menuList, 'menuId', 'parentMenuId').sort(compare('menuOrder'))
+
+  const onOpenChange = Keys => {
+    const rootSubmenuKeys = menuList.filter(_ => !_.parentMenuId).map(_ => _.menuId)
+    const latestOpenKey = Keys.find(key => openKeys.indexOf(key) === -1)
+    if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+      setOpenKeys(Keys)
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
+    }
+  }
+
   const generateMenus = data => {
     return data.map(item => {
       if (item.children) {
@@ -30,8 +46,12 @@ const ComMenu = (props) => {
       )
     })
   }
+
+  const handleselect = key => {
+
+  }
   return (
-    <Menu mode="inline" theme='light' >
+    <Menu mode="inline" theme='light' onOpenChange={onOpenChange} openKeys={openKeys} onSelect={handleselect}  >
       {generateMenus(menuTree)}
     </Menu>
   )

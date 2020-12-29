@@ -17,7 +17,7 @@ export default {
         let { userId, token } = data[VALUE];
         window.sessionStorage.setItem(`${prefix}userId`, userId);
         window.sessionStorage.setItem(`${prefix}token`, token);
-        history.push('/');
+        yield put({ type: 'app/GetMenuList' })
       }
     }
   },

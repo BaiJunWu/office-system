@@ -6,7 +6,7 @@ import style from '../index.less'
 
 const ComSider = (props) => {
   const { isMobile, onCollapseChange } = props.model
-  const { collapsed, theme, MenuList } = props.model.app
+  const { collapsed, theme } = props.model.app
   return (
     <Layout.Sider
       breakpoint="lg"
@@ -24,7 +24,7 @@ const ComSider = (props) => {
         </div>
       </div>
       <div className={style.menuContainer}>
-        <ComMenu collapsed={collapsed} MenuList={MenuList} />
+        <ComMenu collapsed={collapsed} />
       </div>
     </Layout.Sider>
   )

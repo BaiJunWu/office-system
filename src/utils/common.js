@@ -9,7 +9,6 @@ export function arrayToTree (array, id = 'id', parentId = 'pid', children = 'chi
   const result = []
   const hash = {}
   const data = JSON.parse(JSON.stringify(array));
-
   data.forEach((item, index) => {
     hash[data[index][id]] = data[index]
   })

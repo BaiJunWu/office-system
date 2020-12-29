@@ -9,22 +9,15 @@ export default {
 
   state: {
     collapsed: false,
-    theme: 'light',
-    MenuList: []
+    theme: 'light'
   },
 
   subscriptions: {
-    setup ({ dispatch, history }) {
+    setupHistory ({ dispatch, history }) {
       history.listen(({ pathname }) => {
         let token = window.sessionStorage.getItem(`${prefix}token`)
         if (pathname === '/login' || (pathname === '/' && !token)) {
           history.push('/login')
-        } else {
-          if (pathname === '/') {
-            dispatch({
-              type: 'GetMenuList'
-            })
-          }
         }
       });
     }
@@ -35,10 +28,8 @@ export default {
       let data = yield call(GetWebMenuList);
       if (data[STATUS] === SUCCESS) {
         const MenuList = data[VALUE].sort(compare('menuOrder'));
-        yield put({
-          type: 'handleMenuList',
-          payload: { MenuList },
-        })
+        sessionStorage.setItem(`${prefix}menulist`, JSON.stringify(MenuList))
+        history.push('/dashboard')
       } else {
         message.error(data.response)
         history.push('/login')
@@ -50,8 +41,5 @@ export default {
     handleEditCollapsed (state, { payload }) {
       return { ...state, ...payload }
     },
-    handleMenuList (state, { payload }) {
-      return { ...state, ...payload }
-    }
   },
 };
