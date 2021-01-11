@@ -1,9 +1,12 @@
-import { resolve } from 'path'
+import { resolve } from 'path';
 import { defineConfig } from 'umi';
-import { OA_PLATFORM_API, OA_PLATFORM_SERVER } from './src/utils/config'
-
+import {
+  WECHAT_PLATFORM_API,
+  WECHAT_PLATFORM_SERVER,
+} from './src/utils/config';
 
 export default defineConfig({
+  antd: {},
   dva: {
     immer: true,
     hmr: false,
@@ -18,19 +21,17 @@ export default defineConfig({
     components: resolve(__dirname, './src/components'),
   },
   proxy: {
-    [OA_PLATFORM_API]: {
-      target: OA_PLATFORM_SERVER,
-      changeOrigin: true
+    [WECHAT_PLATFORM_API]: {
+      target: WECHAT_PLATFORM_SERVER,
+      changeOrigin: true,
     },
   },
   routes: [
-    { path: "/login", component: "./login" },
+    { exact: true, path: '/login', component: './login' },
     {
-      path: "/", component: "../layouts",
-      routes: [
-        { exact: true, path: "/oapending", component: "./oapending" },
-        { exact: true, path: "/oamanage", component: "./oamanage" },
-      ]
+      path: '/',
+      component: '../layouts',
+      routes: [{ exact: true, path: '/menu', component: './oapending' }],
     },
-  ]
+  ],
 });

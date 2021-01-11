@@ -1,22 +1,27 @@
-import React, { Component } from 'react'
-import { connect } from 'umi'
-import { Card, Layout, Form } from 'antd'
-import CardLeft from './components/CardLeft'
-import CardRight from './components/CardRight'
-import Page from 'components/Page'
-const { Sider, Content } = Layout
-import style from './index.less'
+import React, { Component } from 'react';
+import { connect } from 'umi';
+import { Card, Layout } from 'antd';
+import CardLeft from './components/CardLeft';
+import CardRight from './components/CardRight';
+import Page from 'components/Page';
+const { Sider, Content } = Layout;
+import style from './index.less';
 
 export class OaPending extends Component {
   state = {
     isCollapsed: false,
-  }
+  };
   handleCollapsed_Click = () => {
-    this.setState({ isCollapsed: !this.state.isCollapsed })
+    this.setState({ isCollapsed: !this.state.isCollapsed });
+  };
+  componentWillUnmount() {
+    this.setState = () => {
+      return;
+    };
   }
-  render () {
-    const { oapending, dispatch, form } = this.props
-    const { list } = oapending
+  render() {
+    const { oapending, dispatch, form } = this.props;
+    const { list } = oapending;
     return (
       <div className={style.pending}>
         <Layout>
@@ -39,9 +44,9 @@ export class OaPending extends Component {
           </Layout>
         </Layout>
       </div>
-    )
+    );
   }
 }
 
-OaPending = Form.create()(OaPending);
+// OaPending = Form.create()(OaPending);
 export default connect(({ oapending }) => ({ oapending }))(OaPending);

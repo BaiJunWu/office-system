@@ -1,22 +1,18 @@
 module.exports = {
-  siteName: '管理平台',
-  copyright: '轶贝科技  ©2020',
+  siteName: '小程序管理平台',
+  copyright: '轶贝科技  ©2021',
   logoPath: '/logo.svg',
-  prefix: 'OA_platform',
-  OA_PLATFORM_API: '/jds/api/v1',
-  OA_PLATFORM_UPLOAD: '/upload/api/v1',
-  OA_PLATFORM_DOWNLOAD: '/download',
-  OA_PLATFORM_SERVER: 'http://nginx166.tunnel.yibeitech.cn',
+  prefix: 'wechat_platform',
+  WECHAT_PLATFORM_API: '/wechat/api/v1',
+  WECHAT_PLATFORM_UPLOAD: '/upload/api/v1',
+  WECHAT_PLATFORM_DOWNLOAD: '/download',
+  WECHAT_PLATFORM_SERVER: 'http://wsptest.yibeitech.cn:18004',
 
-  paginationInfo: {
-    page: 1,
-    pageSize: 10,
-  },
   resResult: {
     FAIL: 1,
     SUCCESS: 0,
     STATUS: 'code',
     VALUE: 'response',
     MSG: 'response',
-  }
-}
+  },
+};
