@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import config from 'config';
-import { connect } from 'umi';
+import { connect, Redirect } from 'umi';
 import { Layout, Drawer } from 'antd';
 import { prefix } from 'utils/config';
 import { enquireScreen, unenquireScreen } from 'enquire-js';
+import Bread from 'components/Layout/Bread';
 import Header from 'components/Layout/Header';
 import Sider from 'components/Layout/Sider';
 import style from './index.less';
@@ -39,14 +40,13 @@ class PrimaryLayout extends Component {
   }
   render() {
     const appList = JSON.parse(sessionStorage.getItem(`${prefix}appList`));
-    const menuList = JSON.parse(sessionStorage.getItem(`${prefix}menuList`));
-    const appId = sessionStorage.getItem(`${prefix}appId`);
+    const menuList =
+      JSON.parse(sessionStorage.getItem(`${prefix}menuList`)) || [];
     const { isMobile } = this.state;
     const { app, dispatch, children } = this.props;
     const { collapsed } = app;
     const model = {
       app,
-      appId,
       appList,
       menuList,
       dispatch,
@@ -73,7 +73,11 @@ class PrimaryLayout extends Component {
           <div className={style.container}>
             <Header model={model} />
             <Content>
-              <div className={style.content}>{children}</div>
+              <div className={style.content}>
+                <Bread model={model} />
+                {children}
+                <Redirect to="/menu" />
+              </div>
               <Footer className={style.footer}>{config.copyright}</Footer>
             </Content>
           </div>

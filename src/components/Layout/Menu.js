@@ -1,16 +1,20 @@
 import React, { Fragment, useState } from 'react';
-import { NavLink } from 'umi';
+import { NavLink, useLocation } from 'umi';
 import { Menu } from 'antd';
 import { arrayToTree, compare } from 'utils/common';
-import { MenuUnfoldOutlined } from '@ant-design/icons';
 const { SubMenu } = Menu;
 
 const ComMenu = (props) => {
   const [openKeys, setOpenKeys] = useState([]);
+  const location = useLocation();
+
   const menuList = props.menuList;
+
   const menuTree = arrayToTree(menuList, 'menuId', 'menuParentId').sort(
     compare('menuOrder'),
   );
+  let menuKey = menuList.filter((_) => _.menuUrl == location.pathname);
+
   const onOpenChange = (Keys) => {
     const rootSubmenuKeys = menuList
       .filter((_) => !_.menuParentId)
@@ -31,7 +35,6 @@ const ComMenu = (props) => {
             key={item.menuId}
             title={
               <Fragment>
-                <MenuUnfoldOutlined />
                 <span>{item.menuName}</span>
               </Fragment>
             }
@@ -55,6 +58,7 @@ const ComMenu = (props) => {
     <Menu
       mode="inline"
       theme={props.theme}
+      selectedKeys={menuKey.length == 0 ? [] : [menuKey[0].menuId]}
       onOpenChange={onOpenChange}
       openKeys={openKeys}
       onSelect={handleselect}

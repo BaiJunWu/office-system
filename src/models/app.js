@@ -8,25 +8,13 @@ export default {
   state: {
     collapsed: false,
     theme: 'light',
-    appId: sessionStorage.getItem(`${prefix}appId`)
-      ? sessionStorage.getItem(`${prefix}appId`)
-      : '',
+    appId: '',
   },
 
   subscriptions: {
-    setupHistory({ dispatch, history }) {
-      history.listen(({ pathname }) => {
-        if (pathname === '/') {
-          let token = window.sessionStorage.getItem(`${prefix}token`);
-          if (token) {
-            dispatch({
-              type: 'authorizeList',
-              payload: {},
-            });
-          } else {
-            history.push('/login');
-          }
-        }
+    setup({ dispatch }) {
+      dispatch({
+        type: 'init',
       });
     },
     setupRequestCancel({ history }) {
@@ -43,46 +31,49 @@ export default {
   },
 
   effects: {
-    // 获取授权列表
-    *authorizeList({ payload }, { select, put, call }) {
+    *init({ payload }, { put, call }) {
       let userId = window.sessionStorage.getItem(`${prefix}userId`);
+      // 获取授权列表
       let data = yield call(GetAuthorizeList, userId);
       if (data[STATUS] === SUCCESS) {
         sessionStorage.setItem(`${prefix}appList`, JSON.stringify(data[VALUE]));
-        sessionStorage.setItem(`${prefix}appId`, data[VALUE][0].appId);
+        let isAppId = sessionStorage.getItem(`${prefix}appId`)
+          ? sessionStorage.getItem(`${prefix}appId`)
+          : data[VALUE][0].appId;
+        let appId = payload ? payload.appId : isAppId;
         yield put({
-          type: 'user',
+          type: 'getMenuList',
+          payload: {
+            userId,
+          },
         });
         yield put({
-          type: 'menulist',
+          type: 'handleAppId_Change',
+          payload: {
+            appId: appId,
+          },
         });
       } else {
         history.push('/login');
       }
     },
-    // 获取当前用户信息
-    *user({ payload }, { put, call }) {
-      let userId = window.sessionStorage.getItem(`${prefix}userId`);
-      let data = yield call(GetUser, userId);
-      if (data[STATUS] === SUCCESS) {
-        sessionStorage.setItem(`${prefix}user`, data[VALUE].userName);
-      } else {
-        history.push('/login');
+    *getMenuList({ payload }, { call, put, all }) {
+      let { userId } = payload;
+      let data = yield all([call(GetUser, userId), call(GetMenuList)]);
+      if (data[0][STATUS] === SUCCESS) {
+        sessionStorage.setItem(`${prefix}user`, data[0][VALUE].userName);
       }
-    },
-    *menulist({ payload }, { put, call }) {
-      let data = yield call(GetMenuList);
-      if (data[STATUS] === SUCCESS) {
+      if (data[1][STATUS] === SUCCESS) {
         sessionStorage.setItem(
           `${prefix}menuList`,
-          JSON.stringify(data[VALUE]),
+          JSON.stringify(data[1][VALUE]),
         );
       }
     },
     // 退出登陆
     *signOut({ payload }, { call, put }) {
       window.sessionStorage.clear();
-      history.push('/');
+      history.push('/login');
     },
   },
 

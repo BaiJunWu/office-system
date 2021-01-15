@@ -31,7 +31,10 @@ export default defineConfig({
     {
       path: '/',
       component: '../layouts',
-      routes: [{ exact: true, path: '/menu', component: './oapending' }],
+      routes: [
+        { exact: true, path: '/menu', component: './menu' },
+        { component: './404' },
+      ],
     },
   ],
 });

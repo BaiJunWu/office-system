@@ -53,7 +53,7 @@ const ComHeader = (props) => {
   };
   const handleSelect_Change = (value) => {
     dispatch({
-      type: 'app/handleAppId_Change',
+      type: 'app/init',
       payload: {
         appId: value,
       },

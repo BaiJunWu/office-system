@@ -1,14 +1,12 @@
 import { GetAppliedPage } from './services';
-import { prefix, resResult, paginationInfo } from 'utils/config';
-import { pagination } from 'utils/common';
+import { prefix, resResult } from 'utils/config';
 const { SUCCESS, STATUS, VALUE, MSG } = resResult;
 
 export default {
-  namespace: 'oapending',
+  namespace: 'menu',
 
   state: {
-    list: [],
-    selectedRowKeys: [],
+    modalVisible: false,
   },
 
   subscriptions: {},
@@ -16,7 +14,7 @@ export default {
   effects: {},
 
   reducers: {
-    handleApplied(state, { payload }) {
+    handleModalVisible(state, { payload }) {
       return { ...state, ...payload };
     },
   },

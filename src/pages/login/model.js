@@ -16,6 +16,9 @@ export default {
         window.sessionStorage.setItem(`${prefix}userId`, userId);
         window.sessionStorage.setItem(`${prefix}token`, token);
         history.push('/');
+        yield put({
+          type: 'app/init',
+        });
       }
     },
   },
