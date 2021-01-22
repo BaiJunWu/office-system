@@ -3,10 +3,11 @@ import { defineConfig } from 'umi';
 import {
   WECHAT_PLATFORM_API,
   WECHAT_PLATFORM_SERVER,
+  WECHAT_PLATFORM_UPLOAD,
+  WECHAT_PLATFORM_DOWNLOAD,
 } from './src/utils/config';
 
 export default defineConfig({
-  antd: {},
   dva: {
     immer: true,
     hmr: false,
@@ -25,6 +26,14 @@ export default defineConfig({
       target: WECHAT_PLATFORM_SERVER,
       changeOrigin: true,
     },
+    [WECHAT_PLATFORM_UPLOAD]: {
+      target: 'http://wsptest.yibeitech.cn:18004',
+      changeOrigin: true,
+    },
+    [WECHAT_PLATFORM_DOWNLOAD]: {
+      target: 'http://wsptest.yibeitech.cn:18004',
+      changeOrigin: true,
+    },
   },
   routes: [
     { exact: true, path: '/login', component: './login' },
@@ -32,7 +41,14 @@ export default defineConfig({
       path: '/',
       component: '../layouts',
       routes: [
-        { exact: true, path: '/menu', component: './menu' },
+        { path: '/menu', component: './menu' },
+        { path: '/user', component: './user' },
+        { path: '/permission', component: './permission' },
+        { path: '/goods/category', component: './goods/category' },
+        { path: '/goods/info', component: './goods/info' },
+        { path: '/goods/check', component: './goods/check' },
+        { path: '/base/authorize', component: './base/authorize' },
+
         { component: './404' },
       ],
     },

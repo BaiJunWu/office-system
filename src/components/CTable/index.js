@@ -10,7 +10,7 @@ const CTable = (props) => {
       if (item.name === '删除') {
         btn.push(
           <Button
-            type="text"
+            type="link"
             danger
             key={item.key}
             onClick={() => item.func(record)}
@@ -21,7 +21,7 @@ const CTable = (props) => {
         return;
       }
       btn.push(
-        <Button type="text" key={item.key} onClick={() => item.func(record)}>
+        <Button type="link" key={item.key} onClick={() => item.func(record)}>
           {item.name}
         </Button>,
       );
@@ -42,14 +42,7 @@ const CTable = (props) => {
   };
   const tempArr = resolveTableColumns(columns);
   return (
-    <Fragment>
-      <Table
-        className={style.table}
-        bordered
-        columns={tempArr}
-        {...tableProps}
-      />
-    </Fragment>
+    <Table className={style.table} bordered columns={tempArr} {...tableProps} />
   );
 };
 

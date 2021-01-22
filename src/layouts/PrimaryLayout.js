@@ -1,12 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import config from 'config';
-import { connect, Redirect } from 'umi';
+import { connect, Redirect, history } from 'umi';
 import { Layout, Drawer } from 'antd';
-import { prefix } from 'utils/config';
+import { prefix } from 'config';
+import { compare } from 'utils/common';
 import { enquireScreen, unenquireScreen } from 'enquire-js';
 import Bread from 'components/Layout/Bread';
 import Header from 'components/Layout/Header';
 import Sider from 'components/Layout/Sider';
+import Error from 'pages/404';
 import style from './index.less';
 const { Content, Footer } = Layout;
 
@@ -40,15 +42,20 @@ class PrimaryLayout extends Component {
   }
   render() {
     const appList = JSON.parse(sessionStorage.getItem(`${prefix}appList`));
-    const menuList =
-      JSON.parse(sessionStorage.getItem(`${prefix}menuList`)) || [];
+    const menuList = JSON.parse(
+      sessionStorage.getItem(`${prefix}menuList`),
+    ).sort(compare('menuOrder'));
+    const currentRoute = menuList.find(
+      (_) => _.menuUrl === history.location.pathname,
+    );
     const { isMobile } = this.state;
     const { app, dispatch, children } = this.props;
+
     const { collapsed } = app;
     const model = {
       app,
       appList,
-      menuList,
+      menuList: menuList.filter((item) => item.showMenu === 1), // 过滤掉不显示的菜单
       dispatch,
       isMobile,
       onCollapseChange: this.onCollapseChange,
@@ -75,8 +82,13 @@ class PrimaryLayout extends Component {
             <Content>
               <div className={style.content}>
                 <Bread model={model} />
-                {children}
-                <Redirect to="/menu" />
+                {currentRoute ? (
+                  children
+                ) : menuList.length > 0 ? (
+                  <Redirect to={menuList[0].menuUrl} />
+                ) : (
+                  <Error />
+                )}
               </div>
               <Footer className={style.footer}>{config.copyright}</Footer>
             </Content>

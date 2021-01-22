@@ -1,5 +1,5 @@
 import _request from './request';
-import { WECHAT_PLATFORM_API, prefix } from 'config';
+import { WECHAT_PLATFORM_API } from 'config';
 
 export const InvokeApi = async (method, aUrl, data) => {
   // 添加基地址

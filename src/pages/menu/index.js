@@ -1,23 +1,40 @@
 import React, { Component } from 'react';
 import { connect } from 'umi';
-import { prefix } from 'utils/config';
 import Page from 'components/Page';
 import Filter from './components/Filter';
 import List from './components/List';
 import Modal from './components/Modal';
-import { arrayToTree, compare } from 'utils/common';
 
-export class Menu extends Component {
-  render() {
-    const menuList = JSON.parse(sessionStorage.getItem(`${prefix}menuList`));
-    const menuTree = arrayToTree(menuList, 'menuId', 'menuParentId').sort(
-      compare('menuOrder'),
-    );
+class Menu extends Component {
+  onFinish = (values) => {
     const { dispatch, menu } = this.props;
+    const { record } = menu;
+    if (record) {
+      dispatch({
+        type: 'menu/edit',
+        payload: {
+          menuId: record.menuId,
+          ...values,
+        },
+      });
+    } else {
+      dispatch({
+        type: 'menu/add',
+        payload: {
+          ...values,
+        },
+      });
+    }
+  };
+  render() {
+    const { dispatch, menu, loading } = this.props;
+    const { menuList } = menu;
     let modal = {
-      menuTree,
+      loading,
+      menuList,
       dispatch,
       menu,
+      onFinish: this.onFinish,
     };
     return (
       <Page inner>
@@ -29,4 +46,4 @@ export class Menu extends Component {
   }
 }
 
-export default connect(({ menu }) => ({ menu }))(Menu);
+export default connect(({ menu, loading }) => ({ menu, loading }))(Menu);

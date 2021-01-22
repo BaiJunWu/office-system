@@ -1,4 +1,6 @@
 import { message } from 'antd';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 import { WECHAT_PLATFORM_API, prefix, resResult } from 'config';
 const { SUCCESS, STATUS } = resResult;
 
@@ -15,6 +17,12 @@ export const request = {
       } else {
         req.url = req.url + '?appId=' + appId;
       }
+      if (
+        req.options.data instanceof Object &&
+        (req.options.method == 'post' || req.options.method == 'put')
+      ) {
+        req.options.data.appId = appId;
+      }
       await next();
       const { res } = ctx;
       if (res[STATUS] !== SUCCESS) {
@@ -25,6 +33,8 @@ export const request = {
   // 请求拦截器
   requestInterceptors: [
     (url, options) => {
+      NProgress.start();
+      NProgress.set(0.4);
       let urlFilter = `${WECHAT_PLATFORM_API}/user/user_login`;
       if (!urlFilter.includes(url)) {
         let token = window.sessionStorage.getItem(`${prefix}token`);
@@ -34,6 +44,8 @@ export const request = {
   ],
   responseInterceptors: [
     (response) => {
+      NProgress.done(); // 设置加载进度条(结束..)
+      NProgress.remove();
       return response;
     },
   ],

@@ -3,6 +3,7 @@ module.exports = {
   copyright: '轶贝科技  ©2021',
   logoPath: '/logo.svg',
   prefix: 'wechat_platform',
+  IconUrl: '//at.alicdn.com/t/font_2329720_nmvkcidtfvo.js',
   WECHAT_PLATFORM_API: '/wechat/api/v1',
   WECHAT_PLATFORM_UPLOAD: '/upload/api/v1',
   WECHAT_PLATFORM_DOWNLOAD: '/download',

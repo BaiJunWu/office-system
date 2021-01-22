@@ -1,10 +1,15 @@
 import React, { Fragment, useState } from 'react';
 import { NavLink, useLocation } from 'umi';
 import { Menu } from 'antd';
+import { createFromIconfontCN } from '@ant-design/icons';
 import { arrayToTree, compare } from 'utils/common';
+import { IconUrl } from 'config';
 const { SubMenu } = Menu;
 
 const ComMenu = (props) => {
+  const IconFont = createFromIconfontCN({
+    scriptUrl: [IconUrl],
+  });
   const [openKeys, setOpenKeys] = useState([]);
   const location = useLocation();
 
@@ -35,6 +40,7 @@ const ComMenu = (props) => {
             key={item.menuId}
             title={
               <Fragment>
+                {item.iconCls && <IconFont type={item.iconCls} />}
                 <span>{item.menuName}</span>
               </Fragment>
             }
@@ -46,6 +52,7 @@ const ComMenu = (props) => {
       return (
         <Menu.Item key={item.menuId}>
           <NavLink to={item.menuUrl}>
+            {item.iconCls && <IconFont type={item.iconCls} />}
             <span>{item.menuName}</span>
           </NavLink>
         </Menu.Item>

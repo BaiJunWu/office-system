@@ -22,10 +22,12 @@
   "dependencies": {
     "@ant-design/pro-layout": "^6.5.0",
     "@umijs/preset-react": "1.x",
+    "antd": "^4.10.3",
     "classnames": "^2.2.6",
     "enquire-js": "^0.2.1",
     "nprogress": "^0.2.0",
-    "umi": "^3.3.3"
+    "umi": "^3.3.3",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/react": "^16.9.0",

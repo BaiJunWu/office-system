@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import { prefix } from 'utils/config';
-import { Layout, Menu, Avatar, Select } from 'antd';
+import { Layout, Menu, Avatar } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import CSelect from 'components/CSelect';
 import style from './Header.less';
 const { SubMenu } = Menu;
 
@@ -30,27 +31,6 @@ const ComHeader = (props) => {
       </SubMenu>
     </Menu>,
   ];
-  const addValueAndLabel = (Option, array, value, label) => {
-    if (array instanceof Array) {
-      return array.map((item) => {
-        if (item[value] !== null) {
-          return (
-            <Option value={item[value]} key={item[value]}>
-              {item[label]}
-            </Option>
-          );
-        }
-      });
-    } else if (array instanceof Object) {
-      return (
-        <Option value={array[value]} key={array[value]}>
-          {array[label]}
-        </Option>
-      );
-    } else {
-      return null;
-    }
-  };
   const handleSelect_Change = (value) => {
     dispatch({
       type: 'app/init',
@@ -64,6 +44,14 @@ const ComHeader = (props) => {
       dispatch({ type: 'app/signOut' });
     }
   };
+  const selectProps = {
+    style: { width: 130 },
+    value: appId,
+    onSelect: handleSelect_Change,
+    data: appList,
+    id: 'appId',
+    name: 'authorizeName',
+  };
   return (
     <Layout.Header className={style.header}>
       <div className={style.button}>
@@ -72,13 +60,7 @@ const ComHeader = (props) => {
         </div>
       </div>
       <div className={style.appIdSelect}>
-        <Select
-          style={{ width: 130 }}
-          value={appId}
-          onSelect={(value) => handleSelect_Change(value)}
-        >
-          {addValueAndLabel(Select.Option, appList, 'appId', 'authorizeName')}
-        </Select>
+        <CSelect {...selectProps} />
       </div>
       <div className={style.rightContainer}>{rightContent}</div>
     </Layout.Header>

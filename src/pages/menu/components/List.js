@@ -1,20 +1,34 @@
 import React, { useState } from 'react';
 import { pagination } from 'utils/common';
+import { Modal } from 'antd';
 import CTable from 'components/CTable';
 
 function List(props) {
-  const { menuTree } = props;
+  const { menuList, dispatch, loading } = props;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const onEditItem = (record) => {
-    console.log(record);
-    console.log('成功！！');
+    dispatch({
+      type: `menu/handleModalVisible`,
+      payload: {
+        modalVisible: true,
+        record,
+      },
+    });
   };
   const onDeleteItem = (record) => {
-    console.log(record);
-    console.log('成功！！');
+    Modal.confirm({
+      title: '您确定要删除这条记录吗？',
+      onOk: () => {
+        dispatch({
+          type: 'menu/remove',
+          payload: { id: record.menuId },
+        });
+      },
+    });
   };
   const tableProps = {
     size: 'model',
+    loading: loading.effects['menu/query'],
     menuOptions: [
       { key: '1', name: '修改', func: onEditItem },
       { key: '2', name: '删除', func: onDeleteItem },
@@ -52,9 +66,10 @@ function List(props) {
         title: '操作',
         fixed: 'right',
         align: 'center',
+        width: 200,
       },
     ],
-    dataSource: menuTree,
+    dataSource: menuList,
     rowKey: (record) => record.menuId,
     rowSelection: {
       columnWidth: 80,
@@ -63,7 +78,7 @@ function List(props) {
         setSelectedRowKeys(keys);
       },
     },
-    pagination: pagination(menuTree, (pageIndex, pageSize) => {}),
+    pagination: pagination(menuList, (pageIndex, pageSize) => {}),
   };
   return <CTable {...tableProps} />;
 }

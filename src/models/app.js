@@ -1,6 +1,11 @@
 import { history } from 'umi';
 import { prefix, resResult } from 'utils/config';
-import { GetAuthorizeList, GetUser, GetMenuList } from '../services';
+import {
+  get_list,
+  GetAuthorizeList,
+  GetUser,
+  GetUserPermission,
+} from '../services';
 const { SUCCESS, STATUS, VALUE } = resResult;
 export default {
   namespace: 'app',
@@ -53,13 +58,17 @@ export default {
             appId: appId,
           },
         });
+        history.push(history.location.pathname);
       } else {
         history.push('/login');
       }
     },
     *getMenuList({ payload }, { call, put, all }) {
       let { userId } = payload;
-      let data = yield all([call(GetUser, userId), call(GetMenuList)]);
+      let data = yield all([
+        call(GetUser, userId),
+        call(GetUserPermission, userId),
+      ]);
       if (data[0][STATUS] === SUCCESS) {
         sessionStorage.setItem(`${prefix}user`, data[0][VALUE].userName);
       }
