@@ -5,28 +5,29 @@ import Filter from './components/Filter';
 import List from './components/List';
 import Modal from './components/Modal';
 
-class Authorize extends Component {
+class Merchant extends Component {
   onFinish = (values) => {
-    const { dispatch, authorize } = this.props;
-    const { record, authorizeName, pageIndex, pageSize } = authorize;
+    const { dispatch, merchant } = this.props;
+    const { record, vendorName, state, pageIndex, pageSize } = merchant;
     if (record) {
-      values.appIdOpen = record.appIdOpen;
-      values.authorizeId = record.authorizeId;
+      values.vendorId = record.vendorId;
       dispatch({
-        type: 'authorize/edit',
+        type: 'merchant/edit',
         payload: {
           values,
-          authorizeName,
+          vendorName,
+          state,
           pageIndex,
           pageSize,
         },
       });
     } else {
       dispatch({
-        type: 'authorize/add',
+        type: 'merchant/add',
         payload: {
           values,
-          authorizeName,
+          vendorName,
+          state,
           pageIndex,
           pageSize,
         },
@@ -34,23 +35,23 @@ class Authorize extends Component {
     }
   };
   render() {
-    const { dispatch, authorize, loading } = this.props;
+    const { dispatch, merchant, loading } = this.props;
     let modal = {
       loading,
       dispatch,
-      authorize,
+      merchant,
       onFinish: this.onFinish,
     };
     return (
       <Page inner>
-        <Modal {...modal} />
         <Filter {...modal} />
         <List {...modal} />
+        <Modal {...modal} />
       </Page>
     );
   }
 }
 
-export default connect(({ authorize, loading }) => ({ authorize, loading }))(
-  Authorize,
+export default connect(({ merchant, loading }) => ({ merchant, loading }))(
+  Merchant,
 );

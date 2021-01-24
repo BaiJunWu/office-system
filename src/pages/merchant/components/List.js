@@ -4,12 +4,12 @@ import { Modal } from 'antd';
 import CTable from 'components/CTable';
 
 function List(props) {
-  const { dispatch, loading, authorize } = props;
-  const { appidList, authorizeName } = authorize;
+  const { merchant, dispatch, loading } = props;
+  const { vendorList } = merchant;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const onEditItem = (record) => {
     dispatch({
-      type: `authorize/handleModalVisible`,
+      type: `merchant/handleModalVisible`,
       payload: {
         modalVisible: true,
         record,
@@ -17,15 +17,16 @@ function List(props) {
     });
   };
   const onDeleteItem = (record) => {
-    const { authorizeName, pageIndex, pageSize } = authorize;
+    const { vendorName, state, pageIndex, pageSize } = merchant;
     Modal.confirm({
       title: '您确定要删除这条记录吗？',
       onOk: () => {
         dispatch({
-          type: 'authorize/remove',
+          type: 'merchant/remove',
           payload: {
-            id: record.authorizeId,
-            authorizeName,
+            id: record.vendorId,
+            vendorName,
+            state,
             pageIndex,
             pageSize,
           },
@@ -34,32 +35,23 @@ function List(props) {
     });
   };
   const tableProps = {
-    size: 'authorize',
-    loading: loading.effects['authorize/search'],
+    size: 'model',
+    loading: loading.effects['merchant/query'],
     menuOptions: [
       { key: '1', name: '修改', func: onEditItem },
       { key: '2', name: '删除', func: onDeleteItem },
     ],
     columns: [
       {
-        dataIndex: 'appId',
-        title: 'appId',
+        dataIndex: 'vendorName',
+        title: '商户名称',
         align: 'center',
       },
       {
-        dataIndex: 'authorizeName',
-        title: '应用名称',
+        dataIndex: 'state',
+        title: '是否启用',
         align: 'center',
-      },
-      {
-        dataIndex: 'erpUrl',
-        title: 'ERP接口地址',
-        align: 'center',
-      },
-      {
-        dataIndex: 'secret',
-        title: '秘钥',
-        align: 'center',
+        render: (text) => (text === 1 ? '启用' : '停用'),
       },
       {
         dataIndex: 'operation',
@@ -70,8 +62,8 @@ function List(props) {
         width: 200,
       },
     ],
-    dataSource: appidList.list,
-    rowKey: (record) => record.authorizeId,
+    dataSource: vendorList.list,
+    rowKey: (record) => record.vendorId,
     rowSelection: {
       columnWidth: 80,
       selectedRowKeys,
@@ -79,16 +71,7 @@ function List(props) {
         setSelectedRowKeys(keys);
       },
     },
-    pagination: pagination(appidList, (pageIndex, pageSize) => {
-      dispatch({
-        type: 'authorize/search',
-        payload: {
-          authorizeName,
-          pageIndex,
-          pageSize,
-        },
-      });
-    }),
+    pagination: pagination(vendorList, (pageIndex, pageSize) => {}),
   };
   return <CTable {...tableProps} />;
 }

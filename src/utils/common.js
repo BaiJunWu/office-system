@@ -63,7 +63,7 @@ export function pagination(data, callback) {
     pageSize: data.pageSize, // 每页条数
     showSizeChanger: true,
     total: data.total,
-    pageSizeOptions: [10, 20, 50, 100],
+    pageSizeOptions: [10, 20, 30, 50],
     showTotal: (total) => {
       return `共${total}条`;
     },

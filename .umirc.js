@@ -48,7 +48,8 @@ export default defineConfig({
         { path: '/goods/info', component: './goods/info' },
         { path: '/goods/check', component: './goods/check' },
         { path: '/base/authorize', component: './base/authorize' },
-
+        { path: '/base/banner', component: './base/banner' },
+        { path: '/merchant', component: './merchant' },
         { component: './404' },
       ],
     },

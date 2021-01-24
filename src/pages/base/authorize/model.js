@@ -6,7 +6,6 @@ import {
   AuthorizeSearch,
 } from './services';
 import { resResult } from 'utils/config';
-import { arrayToTree, compare } from 'utils/common';
 const { SUCCESS, STATUS, VALUE, MSG } = resResult;
 
 export default {
@@ -39,36 +38,78 @@ export default {
   },
   effects: {
     *add({ payload }, { call, put }) {
-      const data = yield call(AuthorizeAdd, { ...payload });
+      const { values, ...search } = payload;
+      const data = yield call(AuthorizeAdd, { ...values });
       if (data[STATUS] === SUCCESS) {
+        yield put({
+          type: 'handleModalVisible',
+          payload: {
+            modalVisible: false,
+            record: null,
+          },
+        });
+        yield put({
+          type: 'search',
+          payload: {
+            ...search,
+          },
+        });
         message.success('添加成功');
-        yield put({ type: 'authorize/search' });
       }
     },
     *edit({ payload }, { call, put }) {
-      const data = yield call(AuthorizeEdit, { ...payload });
+      const { values, ...search } = payload;
+      const data = yield call(AuthorizeEdit, { ...values });
       if (data[STATUS] === SUCCESS) {
+        yield put({
+          type: 'handleModalVisible',
+          payload: {
+            modalVisible: false,
+            record: null,
+          },
+        });
+        yield put({
+          type: 'search',
+          payload: {
+            ...search,
+          },
+        });
         message.success('修改成功');
-        yield put({ type: 'authorize/search' });
       }
     },
     *search({ payload }, { call, put }) {
+      const { authorizeName, pageIndex, pageSize } = payload;
       const data = yield call(AuthorizeSearch, payload);
       if (data[STATUS] === SUCCESS) {
+        data[VALUE].pageIndex = pageIndex;
+        data[VALUE].pageSize = pageSize;
         yield put({
           type: 'handleList',
           payload: {
             appidList: data[VALUE],
+            authorizeName,
           },
         });
       }
     },
     *remove({ payload }, { call, put }) {
-      const { id } = payload;
+      const { id, ...search } = payload;
       const data = yield call(AuthorizeRemove, id);
       if (data[STATUS] === SUCCESS) {
+        yield put({
+          type: 'handleModalVisible',
+          payload: {
+            modalVisible: false,
+            record: null,
+          },
+        });
+        yield put({
+          type: 'search',
+          payload: {
+            ...search,
+          },
+        });
         message.success('删除成功');
-        yield put({ type: 'authorize/search' });
       }
     },
   },

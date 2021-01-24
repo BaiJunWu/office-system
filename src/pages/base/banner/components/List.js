@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { pagination } from 'utils/common';
-import { Modal } from 'antd';
+import { WECHAT_PLATFORM_DOWNLOAD } from 'config';
+import { Modal, Image } from 'antd';
 import CTable from 'components/CTable';
 
 function List(props) {
-  const { dispatch, loading, authorize } = props;
-  const { appidList, authorizeName } = authorize;
+  const { dispatch, loading, banner } = props;
+  const { bannerList } = banner;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const onEditItem = (record) => {
     dispatch({
-      type: `authorize/handleModalVisible`,
+      type: `banner/handleModalVisible`,
       payload: {
         modalVisible: true,
         record,
@@ -17,48 +18,41 @@ function List(props) {
     });
   };
   const onDeleteItem = (record) => {
-    const { authorizeName, pageIndex, pageSize } = authorize;
     Modal.confirm({
       title: '您确定要删除这条记录吗？',
       onOk: () => {
         dispatch({
-          type: 'authorize/remove',
+          type: `banner/remove`,
           payload: {
-            id: record.authorizeId,
-            authorizeName,
-            pageIndex,
-            pageSize,
+            id: record.bannerId,
           },
         });
       },
     });
   };
   const tableProps = {
-    size: 'authorize',
-    loading: loading.effects['authorize/search'],
+    size: 'banner',
+    loading: loading.effects['banner/query'],
     menuOptions: [
       { key: '1', name: '修改', func: onEditItem },
       { key: '2', name: '删除', func: onDeleteItem },
     ],
     columns: [
       {
-        dataIndex: 'appId',
-        title: 'appId',
+        dataIndex: 'bannerPath',
+        title: '广告图',
         align: 'center',
+        render: (bannerPath) => (
+          <Image
+            src={`${WECHAT_PLATFORM_DOWNLOAD}/${bannerPath}`}
+            width={120}
+            height={120}
+          />
+        ),
       },
       {
-        dataIndex: 'authorizeName',
-        title: '应用名称',
-        align: 'center',
-      },
-      {
-        dataIndex: 'erpUrl',
-        title: 'ERP接口地址',
-        align: 'center',
-      },
-      {
-        dataIndex: 'secret',
-        title: '秘钥',
+        dataIndex: 'bannerUrl',
+        title: '跳转地址',
         align: 'center',
       },
       {
@@ -70,8 +64,8 @@ function List(props) {
         width: 200,
       },
     ],
-    dataSource: appidList.list,
-    rowKey: (record) => record.authorizeId,
+    dataSource: bannerList,
+    rowKey: (record) => record.bannerId,
     rowSelection: {
       columnWidth: 80,
       selectedRowKeys,
@@ -79,16 +73,7 @@ function List(props) {
         setSelectedRowKeys(keys);
       },
     },
-    pagination: pagination(appidList, (pageIndex, pageSize) => {
-      dispatch({
-        type: 'authorize/search',
-        payload: {
-          authorizeName,
-          pageIndex,
-          pageSize,
-        },
-      });
-    }),
+    pagination: pagination(bannerList, (pageIndex, pageSize) => {}),
   };
   return <CTable {...tableProps} />;
 }

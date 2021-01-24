@@ -21,7 +21,9 @@ export const request = {
         req.options.data instanceof Object &&
         (req.options.method == 'post' || req.options.method == 'put')
       ) {
-        req.options.data.appId = appId;
+        if (!req.options.data.appId) {
+          req.options.data.appId = appId;
+        }
       }
       await next();
       const { res } = ctx;

@@ -1,4 +1,5 @@
 import { Get, Put, Delete, Post } from 'utils/requestService';
+
 export function AuthorizeRemove(id) {
   return Delete('/authorize/remove?id=' + id);
 }
@@ -13,12 +14,11 @@ export function AuthorizeEdit(params) {
 
 export function AuthorizeSearch(params) {
   const { authorizeName, pageIndex, pageSize } = params;
-  return Get(
-    '/authorize/search?authorizeName=' +
-      authorizeName +
-      '&pageIndex=' +
-      pageIndex +
-      '&pageSize=' +
-      pageSize,
-  );
+  let aUrl = '';
+  if (authorizeName == '' || !authorizeName) {
+    aUrl = '?pageIndex=' + pageIndex;
+  } else {
+    aUrl = '?authorizeName=' + authorizeName + '&pageIndex=' + pageIndex;
+  }
+  return Get('/authorize/search' + aUrl + '&pageSize=' + pageSize);
 }
