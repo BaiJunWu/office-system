@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { pagination } from 'utils/common';
 import { Modal } from 'antd';
 import CTable from 'components/CTable';
 
 function List(props) {
-  const { dispatch, loading, authorize } = props;
+  const isCancelled = useRef(false);
+  useEffect(() => {
+    return () => (isCancelled.current = true);
+  });
+  const { dispatch, loading, authorize, onWechat } = props;
   const { appidList, authorizeName } = authorize;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const onEditItem = (record) => {
@@ -34,11 +38,13 @@ function List(props) {
     });
   };
   const tableProps = {
-    size: 'authorize',
+    size: 'model',
     loading: loading.effects['authorize/search'],
     menuOptions: [
       { key: '1', name: '修改', func: onEditItem },
       { key: '2', name: '删除', func: onDeleteItem },
+      { key: '3', name: '微信账户', func: onWechat },
+      { key: '4', name: '参数授权' },
     ],
     columns: [
       {

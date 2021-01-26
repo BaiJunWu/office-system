@@ -3,7 +3,7 @@ import config from 'config';
 import { connect, Redirect, history } from 'umi';
 import { Layout, Drawer } from 'antd';
 import { prefix } from 'config';
-import { compare } from 'utils/common';
+import { compare, pathMatchRegexp } from 'utils/common';
 import { enquireScreen, unenquireScreen } from 'enquire-js';
 import Bread from 'components/Layout/Bread';
 import Header from 'components/Layout/Header';
@@ -46,11 +46,10 @@ class PrimaryLayout extends Component {
       sessionStorage.getItem(`${prefix}menuList`),
     ).sort(compare('menuOrder'));
     const currentRoute = menuList.find(
-      (_) => _.menuUrl === history.location.pathname,
+      (_) => _.menuUrl && pathMatchRegexp(_.menuUrl, history.location.pathname),
     );
     const { isMobile } = this.state;
-    const { app, dispatch, children } = this.props;
-
+    const { app, dispatch, children, loading } = this.props;
     const { collapsed } = app;
     const model = {
       app,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'umi';
+import { connect, history } from 'umi';
 import Page from 'components/Page';
 import Filter from './components/Filter';
 import List from './components/List';
@@ -33,6 +33,21 @@ class Authorize extends Component {
       });
     }
   };
+  onWechat = (record) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'authorize/historypath',
+      payload: {
+        path: '/base/wechataccount/',
+        record,
+      },
+    });
+  };
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
   render() {
     const { dispatch, authorize, loading } = this.props;
     let modal = {
@@ -40,12 +55,13 @@ class Authorize extends Component {
       dispatch,
       authorize,
       onFinish: this.onFinish,
+      onWechat: this.onWechat,
     };
     return (
       <Page inner>
-        <Modal {...modal} />
         <Filter {...modal} />
         <List {...modal} />
+        <Modal {...modal} />
       </Page>
     );
   }

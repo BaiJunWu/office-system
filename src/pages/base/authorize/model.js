@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import { history } from 'umi';
 import {
   AuthorizeRemove,
   AuthorizeEdit,
@@ -111,6 +112,10 @@ export default {
         });
         message.success('删除成功');
       }
+    },
+    *historypath({ payload }, { call, put }) {
+      const { path, record } = payload;
+      history.push(path + record.appId);
     },
   },
 

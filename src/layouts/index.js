@@ -1,15 +1,23 @@
 import React, { Component, Fragment } from 'react';
 import { prefix, siteName } from 'config';
+import { Helmet, connect } from 'umi';
+import { ConfigProvider } from 'antd';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
 import zhCN from 'antd/lib/locale/zh_CN';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
-import { Helmet, connect } from 'umi';
-import { ConfigProvider } from 'antd';
 import Loader from 'components/Loader';
 import PrimaryLayout from './PrimaryLayout';
+dayjs.locale('zh-cn');
 
 class ComLayout extends Component {
   previousPath = '';
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
   render() {
     let token = sessionStorage.getItem(`${prefix}token`);
     if (!token) {

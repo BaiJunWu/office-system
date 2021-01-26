@@ -1,4 +1,8 @@
-import { Pagination } from 'antd';
+import { pathToRegexp } from 'path-to-regexp';
+
+export function pathMatchRegexp(regexp, pathname) {
+  return pathToRegexp(regexp).exec(pathname);
+}
 
 export function deepCopy(newobj, oldobj) {
   for (var k in oldobj) {
@@ -52,6 +56,81 @@ export function arrayToTree(
     }
   });
   return result;
+}
+
+export function BuildDate(aDate) {
+  if (aDate == '' || aDate == null || typeof aDate == 'undefined') {
+    return new Date();
+  } else if (typeof aDate == 'string') {
+    switch (aDate.length) {
+      case 14:
+        aDate =
+          aDate.substr(0, 4) +
+          '/' +
+          aDate.substr(4, 2) +
+          '/' +
+          aDate.substr(6, 2) +
+          ' ' +
+          aDate.substr(8, 2) +
+          ':' +
+          aDate.substr(10, 2) +
+          ':' +
+          aDate.substr(12, 2);
+        break;
+      case 8:
+        aDate =
+          aDate.substr(0, 4) +
+          '/' +
+          aDate.substr(4, 2) +
+          '/' +
+          aDate.substr(6, 2);
+        break;
+    }
+    aDate = aDate
+      .replace(/-/g, '/')
+      .replace('年', '/')
+      .replace('月', '/')
+      .replace('日', '')
+      .replace('时', ':')
+      .replace('分', ':')
+      .replace('秒', '');
+    return new Date(aDate);
+  } else {
+    return aDate;
+  }
+}
+
+export function FormatDate(aDate, aFormat) {
+  aDate = BuildDate(aDate);
+  if (typeof aFormat == 'undefined') aFormat = 'yyyy-MM-dd';
+  var _date = aDate;
+
+  var _week = ['日', '一', '二', '三', '四', '五', '六'];
+  aFormat = aFormat.replace(/yyyy|YYYY/, _date.getFullYear());
+  aFormat = aFormat.replace(/yy|YY/, ('' + _date.getYear()).substr(2, 2));
+
+  var _month = '00' + (_date.getMonth() + 1);
+  aFormat = aFormat.replace(/MM/, _month.substr(_month.length - 2, 2));
+  aFormat = aFormat.replace(/M/g, _date.getMonth() + 1);
+
+  aFormat = aFormat.replace(/w|W/g, _week[_date.getDay()]);
+
+  var _day = '00' + _date.getDate();
+  aFormat = aFormat.replace(/dd|DD/, _day.substr(_day.length - 2, 2));
+  aFormat = aFormat.replace(/d|D/g, _date.getDate());
+
+  var _hour = '00' + _date.getHours();
+  aFormat = aFormat.replace(/hh|HH/, _hour.substr(_hour.length - 2, 2));
+  aFormat = aFormat.replace(/h|H/g, _date.getHours());
+
+  var _minute = '00' + _date.getMinutes();
+  aFormat = aFormat.replace(/mm/, _minute.substr(_minute.length - 2, 2));
+  aFormat = aFormat.replace(/m/g, _date.getMinutes());
+
+  var _second = '00' + _date.getSeconds();
+  aFormat = aFormat.replace(/ss|SS/, _second.substr(_second.length - 2, 2));
+  aFormat = aFormat.replace(/s|S/g, _date.getSeconds());
+  return aFormat;
 }
 
 export function pagination(data, callback) {

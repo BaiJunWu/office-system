@@ -1,11 +1,6 @@
 import { history } from 'umi';
 import { prefix, resResult } from 'utils/config';
-import {
-  get_list,
-  GetAuthorizeList,
-  GetUser,
-  GetUserPermission,
-} from '../services';
+import { GetAuthorizeList, GetUser, GetUserPermission } from '../services';
 const { SUCCESS, STATUS, VALUE } = resResult;
 export default {
   namespace: 'app',
@@ -47,15 +42,16 @@ export default {
           : data[VALUE][0].appId;
         let appId = payload ? payload.appId : isAppId;
         yield put({
-          type: 'getMenuList',
+          type: 'handleAppId_Change',
           payload: {
-            userId,
+            appId,
           },
         });
         yield put({
-          type: 'handleAppId_Change',
+          type: 'getMenuList',
           payload: {
-            appId: appId,
+            userId,
+            appId,
           },
         });
         history.push(history.location.pathname);

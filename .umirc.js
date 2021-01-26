@@ -48,10 +48,21 @@ export default defineConfig({
         { path: '/goods/info', component: './goods/info' },
         { path: '/goods/check', component: './goods/check' },
         { path: '/base/authorize', component: './base/authorize' },
+        { path: '/base/wechataccount/:id', component: './base/wechataccount' },
+        // { path: "/base/paramauthorize/:id", component: "./base/paramauthorize" },
         { path: '/base/banner', component: './base/banner' },
         { path: '/merchant', component: './merchant' },
+        { path: '/order/controller', component: './order/controller' },
         { component: './404' },
       ],
     },
   ],
+  chainWebpack(config) {
+    // antd moment -> dayjs
+    config.plugin('moment2dayjs').use('antd-dayjs-webpack-plugin', [
+      {
+        preset: 'antdv3',
+      },
+    ]);
+  },
 });
