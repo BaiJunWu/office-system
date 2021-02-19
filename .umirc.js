@@ -49,7 +49,10 @@ export default defineConfig({
         { path: '/goods/check', component: './goods/check' },
         { path: '/base/authorize', component: './base/authorize' },
         { path: '/base/wechataccount/:id', component: './base/wechataccount' },
-        // { path: "/base/paramauthorize/:id", component: "./base/paramauthorize" },
+        {
+          path: '/base/paramauthorize/:id',
+          component: './base/paramauthorize',
+        },
         { path: '/base/banner', component: './base/banner' },
         { path: '/merchant', component: './merchant' },
         { path: '/order/controller', component: './order/controller' },

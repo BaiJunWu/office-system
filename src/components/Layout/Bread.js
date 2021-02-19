@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Breadcrumb } from 'antd';
 import { withRouter } from 'umi';
+import { pathMatchRegexp } from 'utils/common';
 import style from './Bread.less';
 
 class Bread extends Component {
   generateBreadcrumbs = (location, menuList) => {
     let breadList = [];
     menuList.map((item, index) => {
-      if (item.menuUrl === location.pathname) {
+      if (pathMatchRegexp(item.menuUrl, location.pathname)) {
         for (const item2 of menuList) {
           if (item.menuParentId === item2.menuId) {
             breadList.push(
@@ -28,7 +29,7 @@ class Bread extends Component {
     const { location, model } = this.props;
     return (
       <Breadcrumb className={style.bread}>
-        {this.generateBreadcrumbs(location, model.menuList)}
+        {this.generateBreadcrumbs(location, model.menuListBread)}
       </Breadcrumb>
     );
   }

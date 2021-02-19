@@ -8,7 +8,7 @@ function List(props) {
   useEffect(() => {
     return () => (isCancelled.current = true);
   });
-  const { dispatch, loading, authorize, onWechat } = props;
+  const { dispatch, loading, authorize, onWechat, onParamAuthorize } = props;
   const { appidList, authorizeName } = authorize;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const onEditItem = (record) => {
@@ -44,7 +44,7 @@ function List(props) {
       { key: '1', name: '修改', func: onEditItem },
       { key: '2', name: '删除', func: onDeleteItem },
       { key: '3', name: '微信账户', func: onWechat },
-      { key: '4', name: '参数授权' },
+      { key: '4', name: '参数授权', func: onParamAuthorize },
     ],
     columns: [
       {

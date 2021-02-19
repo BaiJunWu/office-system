@@ -7,7 +7,36 @@ import Modal from './components/Modal';
 
 class WechatAccount extends Component {
   onFinish = (values) => {
-    console.log(values);
+    const { dispatch, wechataccount } = this.props;
+    const { record, appId } = wechataccount;
+    if (record) {
+      let data = [];
+      values.brandDtoList.forEach((item) => {
+        data.push({ erpBrandId: item });
+      });
+      values.brandDtoList = data;
+      dispatch({
+        type: 'wechataccount/edit',
+        payload: {
+          wechatId: record.wechatId,
+          appId: record.appId,
+          ...values,
+        },
+      });
+    } else {
+      let data = [];
+      values.brandDtoList.forEach((item) => {
+        data.push({ erpBrandId: item });
+      });
+      values.brandDtoList = data;
+      dispatch({
+        type: 'wechataccount/add',
+        payload: {
+          appId,
+          ...values,
+        },
+      });
+    }
   };
   componentWillUnmount() {
     this.setState = (state, callback) => {

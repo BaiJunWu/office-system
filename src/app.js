@@ -12,10 +12,13 @@ export const request = {
       // 请求前加上appid
       let appId = sessionStorage.getItem(`${prefix}appId`) || '';
       const { req } = ctx;
-      if (req.url.indexOf('?') > 0) {
-        req.url = req.url + '&appId=' + appId;
+      if (req.url.indexOf('appId') > 0) {
       } else {
-        req.url = req.url + '?appId=' + appId;
+        if (req.url.indexOf('?') > 0) {
+          req.url = req.url + '&appId=' + appId;
+        } else {
+          req.url = req.url + '?appId=' + appId;
+        }
       }
       if (
         req.options.data instanceof Object &&

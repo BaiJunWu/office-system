@@ -55,6 +55,7 @@ class PrimaryLayout extends Component {
       app,
       appList,
       menuList: menuList.filter((item) => item.showMenu === 1), // 过滤掉不显示的菜单
+      menuListBread: menuList,
       dispatch,
       isMobile,
       onCollapseChange: this.onCollapseChange,

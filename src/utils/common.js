@@ -138,10 +138,10 @@ export function pagination(data, callback) {
     onChange: (page, pageSize) => {
       callback(page, pageSize);
     },
-    current: data.pageIndex, // 当前页数
-    pageSize: data.pageSize, // 每页条数
+    current: data.pageIndex || 1, // 当前页数
+    pageSize: data.pageSize || 10, // 每页条数
     showSizeChanger: true,
-    total: data.total,
+    total: data.total || data.length,
     pageSizeOptions: [10, 20, 30, 50],
     showTotal: (total) => {
       return `共${total}条`;

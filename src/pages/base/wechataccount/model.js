@@ -4,7 +4,6 @@ import {
   WechatRemove,
   WechatAdd,
   WechatEdit,
-  WechatSearch,
   WechatGetErpList,
 } from './services';
 import { pathMatchRegexp } from 'utils/common';
@@ -15,7 +14,9 @@ export default {
   namespace: 'wechataccount',
 
   state: {
-    wechatList: null,
+    brandList: [],
+    wechatList: [],
+    appId: '',
     modalVisible: false,
     record: null,
   },
@@ -27,13 +28,15 @@ export default {
           '/base/wechataccount/:id',
           location.pathname,
         );
-        match &&
-          dispatch({
-            type: 'query',
-            payload: {
-              appId: match[1],
-            },
-          });
+        if (match) {
+          match &&
+            dispatch({
+              type: 'query',
+              payload: {
+                appId: match[1],
+              },
+            });
+        }
       });
     },
   },
@@ -43,14 +46,30 @@ export default {
       const data = yield call(WechatGetList, appId);
       if (data[STATUS] === SUCCESS) {
         yield put({
-          type: 'handleList',
+          type: 'brandList',
           payload: {
             wechatList: data[VALUE],
+            appId,
+          },
+        });
+      }
+    },
+    *brandList({ payload }, { call, put }) {
+      const { appId, wechatList } = payload;
+      const data = yield call(WechatGetErpList, appId);
+      if (data[STATUS] === SUCCESS) {
+        yield put({
+          type: 'handleList',
+          payload: {
+            appId,
+            wechatList,
+            brandList: data[VALUE],
           },
         });
       }
     },
     *add({ payload }, { call, put }) {
+      const { appId } = payload;
       const data = yield call(WechatAdd, payload);
       yield put({
         type: 'handleModalVisible',
@@ -61,11 +80,54 @@ export default {
       });
       if (data[STATUS] === SUCCESS) {
         message.success('添加成功');
-        yield put({ type: 'query' });
+        yield put({
+          type: 'query',
+          payload: {
+            appId,
+          },
+        });
       }
     },
-    *edit({ payload }, { call, put }) {},
-    *remove({ payload }, { call, put }) {},
+    *edit({ payload }, { call, put }) {
+      const { appId } = payload;
+      const data = yield call(WechatEdit, payload);
+      yield put({
+        type: 'handleModalVisible',
+        payload: {
+          modalVisible: false,
+          record: null,
+        },
+      });
+      if (data[STATUS] === SUCCESS) {
+        message.success('修改成功');
+        yield put({
+          type: 'query',
+          payload: {
+            appId,
+          },
+        });
+      }
+    },
+    *remove({ payload }, { call, put }) {
+      const { id, appId } = payload;
+      const data = yield call(WechatRemove, id);
+      yield put({
+        type: 'handleModalVisible',
+        payload: {
+          modalVisible: false,
+          record: null,
+        },
+      });
+      if (data[STATUS] === SUCCESS) {
+        message.success('删除成功');
+        yield put({
+          type: 'query',
+          payload: {
+            appId,
+          },
+        });
+      }
+    },
   },
 
   reducers: {

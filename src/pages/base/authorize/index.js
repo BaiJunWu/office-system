@@ -43,6 +43,16 @@ class Authorize extends Component {
       },
     });
   };
+  onParamAuthorize = (record) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'authorize/historypath',
+      payload: {
+        path: '/base/paramauthorize/',
+        record,
+      },
+    });
+  };
   componentWillUnmount() {
     this.setState = (state, callback) => {
       return;
@@ -56,6 +66,7 @@ class Authorize extends Component {
       authorize,
       onFinish: this.onFinish,
       onWechat: this.onWechat,
+      onParamAuthorize: this.onParamAuthorize,
     };
     return (
       <Page inner>

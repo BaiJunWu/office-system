@@ -4,9 +4,9 @@ import { Modal } from 'antd';
 import CTable from 'components/CTable';
 
 function List(props) {
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const { dispatch, loading, wechataccount } = props;
   const { wechatList } = wechataccount;
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const onEditItem = (record) => {
     dispatch({
       type: `wechataccount/handleModalVisible`,
@@ -19,7 +19,15 @@ function List(props) {
   const onDeleteItem = (record) => {
     Modal.confirm({
       title: '您确定要删除这条记录吗？',
-      onOk: () => {},
+      onOk: () => {
+        dispatch({
+          type: 'wechataccount/remove',
+          payload: {
+            appId: record.appId,
+            id: record.wechatId,
+          },
+        });
+      },
     });
   };
   const tableProps = {
@@ -34,13 +42,18 @@ function List(props) {
         dataIndex: 'wechatType',
         title: '微信类型',
         align: 'center',
-        render: (wechatType) => {},
+        render: (wechatTyp) => (wechatTyp == 0 ? ' 公众号' : '小程序'),
       },
       {
         dataIndex: 'brandDtoList',
         title: '品牌',
         align: 'center',
-        render: (text) => text.map((val) => val.erpBrandName).join('、'),
+        render: (text) =>
+          text
+            .map((val) => {
+              val.erpBrandName;
+            })
+            .join('、'),
       },
       {
         dataIndex: 'appIdMp',

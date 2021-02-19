@@ -3,9 +3,10 @@ import { Form, Input } from 'antd';
 
 class CForm extends Component {
   renderFormItem = (item) => {
+    const { initialValue, ...itemProps } = item;
     return (
-      <Form.Item key={item.name} {...item}>
-        {item.component || <Input {...item} key={item.name} />}
+      <Form.Item key={item.name} initialValue={initialValue} {...itemProps}>
+        {item.component || <Input {...itemProps} key={item.name} />}
       </Form.Item>
     );
   };
