@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { Button, Row, Col, Form, Input } from 'antd';
-import CTreeSelect from 'components/CTreeSelect';
+import React from 'react';
+import { Button, Row, Col, Form, Modal, message } from 'antd';
 
 function Filter(props) {
   const { dispatch, top } = props;
-  const {} = top;
+  const { selectProductList, pageIndex, pageSize } = top;
   const [form] = Form.useForm();
   const formProps = {
     layout: {
@@ -20,8 +19,36 @@ function Filter(props) {
       marginBottom: 16,
     },
   };
-  const handleDelete_Click = () => {};
-  const handleAdd_Click = () => {};
+  const handleAdd_Click = () => {
+    dispatch({
+      type: `top/handleModalVisible`,
+      payload: {
+        modalVisible: true,
+        pageIndex: 1,
+        pageSize: 10,
+      },
+    });
+  };
+  const handleDelete_Click = () => {
+    Modal.confirm({
+      title: '您确定要删除记录吗？',
+      onOk: () => {
+        if (selectProductList.length == 0) {
+          message.error('未选择商品');
+          return;
+        }
+        dispatch({
+          type: `top/recommendedGoods`,
+          payload: {
+            recommendedProduct: '0',
+            productIdList: selectProductList,
+            pageIndex,
+            pageSize,
+          },
+        });
+      },
+    });
+  };
   return (
     <Form form={form} {...formProps}>
       <Row gutter={24}>
@@ -40,7 +67,10 @@ function Filter(props) {
               >
                 畅销
               </Button>
-              <Button type="ghost" onClick={handleDelete_Click}>
+              <Button
+                style={{ marginRight: '10px' }}
+                onClick={handleDelete_Click}
+              >
                 删除
               </Button>
             </Form.Item>

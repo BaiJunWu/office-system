@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { pagination } from 'utils/common';
 import { WECHAT_PLATFORM_DOWNLOAD } from 'config';
-import { Tag, Image } from 'antd';
+import { Image } from 'antd';
 import CTable from 'components/CTable';
 
 function List(props) {
-  const { dispatch, loading, top } = props;
-  const { productList, selectProductList } = top;
+  const { loading, top, selectedRowKeys, setSelectedRowKeys } = props;
+  const { modelproductList } = top;
   const tableProps = {
+    style: {
+      marginTop: '20px',
+    },
     size: 'model',
-    loading: loading.effects['top/search'],
+    loading: loading.effects['top/modelsearch'],
     columns: [
       {
         dataIndex: 'productPath',
@@ -25,10 +28,11 @@ function List(props) {
         width: 150,
       },
       {
-        dataIndex: 'productId',
-        title: '商品Id',
+        dataIndex: 'vendor',
+        title: '商户',
         align: 'center',
-        width: 200,
+        render: (text) => text && text.vendorName,
+        width: 150,
       },
       {
         dataIndex: 'productCategory',
@@ -49,47 +53,19 @@ function List(props) {
         align: 'center',
         width: 100,
       },
-      {
-        dataIndex: 'url',
-        title: '商品链接',
-        align: 'center',
-        width: 100,
-      },
-      {
-        dataIndex: 'auditState',
-        title: '状态',
-        align: 'center',
-        width: 100,
-        render: (auditState) =>
-          auditState == 0 ? (
-            <Tag color="red">未审核</Tag>
-          ) : (
-            <Tag color="green">已审核</Tag>
-          ),
-      },
-      {
-        dataIndex: 'productOrder',
-        title: '显示顺序',
-        align: 'center',
-        width: 100,
-      },
     ],
-    scroll: { x: 1100 },
-    dataSource: productList,
+    scroll: { x: 800 },
+    dataSource: modelproductList.list,
     rowKey: (record) => record.productId,
     rowSelection: {
+      type: 'radio',
       columnWidth: 80,
-      selectProductList,
+      selectedRowKeys,
       onChange: (keys) => {
-        dispatch({
-          type: 'top/handleList',
-          payload: {
-            selectProductList: keys,
-          },
-        });
+        setSelectedRowKeys(keys);
       },
     },
-    pagination: pagination(productList, (pageIndex, pageSize) => {}),
+    pagination: pagination(modelproductList, (pageIndex, pageSize) => {}),
   };
   return <CTable {...tableProps} />;
 }

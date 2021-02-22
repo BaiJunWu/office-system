@@ -20,20 +20,21 @@ export const Delete = (url) => {
   return InvokeApi('DELETE', url);
 };
 
+// 下载
 export const downloadFile = (
   url,
   method = 'GET',
   { fileType = 'application/octet-stream', fileName = '', data = {} } = {},
 ) => {
-  InvokeApi(method, url, {}, 'blob').then((response) => {
-    const content = response.data; //返回的内容
+  InvokeApi(method, url, {}, 'blob').then((res) => {
+    const content = res.data; //返回的内容
     if (!fileName) {
-      // let fileNameStr = response.response.headers.get('content-disposition').split(";")[1];
-      // fileName = decodeURI(fileNameStr.split("=")[1]); // 形如filename=123.zip
+      let fileNameStr = res.response.headers
+        .get('content-disposition')
+        .split(';')[1];
+      fileName = decodeURI(fileNameStr.split('=')[1]); // 形如filename=123.zip
     }
     const blob = new Blob([content], { type: fileType });
-    console.log(fileName);
-    console.log(blob);
     download(blob, fileName);
   });
 };

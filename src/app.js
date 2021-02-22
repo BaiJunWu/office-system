@@ -30,8 +30,14 @@ export const request = {
       }
       await next();
       const { res } = ctx;
-      if (res[STATUS] !== SUCCESS) {
-        message.error(res.response);
+      if (
+        res.response.headers
+          .get('content-type')
+          .indexOf('multipart/form-data') == -1
+      ) {
+        if (res.data[STATUS] !== SUCCESS) {
+          message.error(res.data.response);
+        }
       }
     },
   ],

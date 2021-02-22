@@ -6,11 +6,12 @@ export default function _request({
   data = {},
   responseType,
 }) {
-  return request(url, { method, data, responseType })
-    .then((res) => {
-      return res;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  return request(url, { method, data, responseType, getResponse: true }).then(
+    (res) => {
+      if (responseType == 'blob') {
+        return res;
+      }
+      return res.data;
+    },
+  );
 }
