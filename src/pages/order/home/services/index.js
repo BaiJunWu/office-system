@@ -1,18 +1,35 @@
-import { Get, Put, Delete } from 'utils/requestService';
-
-export function queryMerchant() {
-  return Get('/vendor/get_list');
-}
+import { Get, Put, Delete, downloadFile } from 'utils/requestService';
 
 export function OrderDelivery(params) {
   return Put('/order/delivery', params);
 }
 
 export function OrderExportExcel(params) {
-  let url = '/order/export_excel';
-  return params
-    ? downloadFile(`${url}?${params}`, 'get')
-    : downloadFile(`${url}`, 'get');
+  const {
+    beginDate,
+    endDate,
+    customerName,
+    vendorId,
+    orderState,
+    invoiceState,
+    customerPhone,
+  } = params;
+  return downloadFile(
+    '/order/export_excel?beginDate=' +
+      beginDate +
+      '&endDate=' +
+      endDate +
+      '&customerName=' +
+      customerName +
+      '&vendorId=' +
+      vendorId +
+      '&orderState=' +
+      orderState +
+      '&invoiceState=' +
+      invoiceState +
+      '&customerPhone=' +
+      customerPhone,
+  );
 }
 
 export function OrderSearch(params) {
@@ -50,6 +67,8 @@ export function OrderSearch(params) {
 }
 
 export function OrderCancel(params) {
-  let { orderId, appIdMp } = params;
-  return Delete(`/order/cancel?id=${orderId}&appIdMp=${appIdMp}`);
+  let { orderId, appIdMp, appId } = params;
+  return Delete(
+    `/order/cancel?id=${orderId}&appIdMp=${appIdMp}&appId=${appId}`,
+  );
 }

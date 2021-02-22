@@ -160,8 +160,9 @@ function Filter(props) {
       //上月总天数<本月日期，比如3月的30日，在2月中没有30
       return year + '-' + month + '-01';
     }
+    return year + '-' + (month - 1) + '-' + day;
   };
-  const handleSearch_Click = () => {
+  const handleSearch_Click = (type = '') => {
     form.validateFields().then((values) => {
       const {
         orderDate,
@@ -194,25 +195,35 @@ function Filter(props) {
         values.vendorId = '';
       }
       values.invoiceState = '';
-      dispatch({
-        type: 'controller/query',
-        payload: {
-          beginDate,
-          endDate,
-          ...values,
-          pageIndex,
-          pageSize,
-        },
-      });
+      if (type == '') {
+        dispatch({
+          type: 'controller/query',
+          payload: {
+            beginDate,
+            endDate,
+            ...values,
+            pageIndex,
+            pageSize,
+          },
+        });
+      } else {
+        dispatch({
+          type: 'controller/exportFile',
+          payload: {
+            beginDate,
+            endDate,
+            ...values,
+          },
+        });
+      }
     });
   };
-  const handleAdd_Click = () => {};
   return (
     <Form form={form} {...formProps}>
       <Row gutter={24}>
         {getFields()}
         <Col span={8} style={{ textAlign: 'right' }}>
-          <Button type="primary" onClick={handleSearch_Click}>
+          <Button type="primary" onClick={() => handleSearch_Click('')}>
             查询
           </Button>
           <Button
@@ -223,7 +234,11 @@ function Filter(props) {
           >
             重置
           </Button>
-          <Button type="ghost" style={{ marginRight: '10px' }}>
+          <Button
+            type="ghost"
+            onClick={() => handleSearch_Click('blob')}
+            style={{ marginRight: '10px' }}
+          >
             下载
           </Button>
           <a

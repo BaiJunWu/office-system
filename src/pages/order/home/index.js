@@ -3,6 +3,7 @@ import { connect } from 'umi';
 import Page from 'components/Page';
 import Filter from './components/Filter';
 import List from './components/List';
+import Modal from './components/Modal';
 
 class Controller extends Component {
   onFinish = (values) => {
@@ -19,6 +20,7 @@ class Controller extends Component {
     };
     return (
       <Page inner>
+        <Modal {...modal} />
         <Filter {...modal} />
         <List {...modal} />
       </Page>

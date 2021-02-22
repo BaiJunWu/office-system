@@ -1,4 +1,5 @@
 import { pathToRegexp } from 'path-to-regexp';
+import { request } from 'umi';
 
 export function pathMatchRegexp(regexp, pathname) {
   return pathToRegexp(regexp).exec(pathname);
@@ -148,4 +149,17 @@ export function pagination(data, callback) {
     },
     position: ['none', 'bottomCenter'],
   };
+}
+
+//处理下载流
+export function download(blob, fileName) {
+  const url = window.URL.createObjectURL(blob); //URL.createObjectURL(object)表示生成一个File对象或Blob对象  ,{type: 'application/zip'}
+  let link = document.createElement('a'); //设置一个隐藏的a标签，href为输出流，设置download
+  link.style.display = 'none';
+  link.href = url;
+  link.setAttribute('download', fileName); //指示浏览器下载url,而不是导航到它；因此将提示用户将其保存为本地文件
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(link.href); //销毁url对象
 }

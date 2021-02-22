@@ -17,6 +17,7 @@ export default defineConfig({
   },
   alias: {
     utils: resolve(__dirname, './src/utils'),
+    common: resolve(__dirname, './src/utils/common'),
     pages: resolve(__dirname, './src/pages'),
     config: resolve(__dirname, './src/utils/config'),
     components: resolve(__dirname, './src/components'),
@@ -47,6 +48,7 @@ export default defineConfig({
         { path: '/goods/category', component: './goods/category' },
         { path: '/goods/info', component: './goods/info' },
         { path: '/goods/check', component: './goods/check' },
+        { path: '/goods/top', component: './goods/top' },
         { path: '/base/authorize', component: './base/authorize' },
         { path: '/base/wechataccount/:id', component: './base/wechataccount' },
         {
@@ -55,7 +57,9 @@ export default defineConfig({
         },
         { path: '/base/banner', component: './base/banner' },
         { path: '/merchant', component: './merchant' },
-        { path: '/order/controller', component: './order/controller' },
+        { path: '/order/home', component: './order/home' },
+        { path: '/order/delivery', component: './order/delivery' },
+        { path: '/order/invoice', component: './order/invoice' },
         { component: './404' },
       ],
     },

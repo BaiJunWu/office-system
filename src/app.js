@@ -48,7 +48,7 @@ export const request = {
     },
   ],
   responseInterceptors: [
-    (response) => {
+    (response, options) => {
       NProgress.done(); // 设置加载进度条(结束..)
       NProgress.remove();
       return response;
